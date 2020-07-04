@@ -1,0 +1,44 @@
+version: "3.5"
+
+services:
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    networks:
+      - MIEL_Board_DB
+    environment:
+      MYSQL_DATABASE: board
+      MYSQL_USER: miel
+      MYSQL_PASSWORD: miel
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      TZ: Asia/Seoul
+    volumes:
+      - ./data/db:/var/lib/mysql
+      - ./docker/data/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    depends_on:
+      - db
+    networks:
+      - MIEL_Board_DB
+    ports:
+      - 10240:80
+    # volumes:
+    #   - ./data/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config/config.user.inc.php
+    environment:
+      PMA_HOST: db
+      PMA_USER: miel
+      PMA_PASSWORD: miel
+
+networks:
+  MIEL_Board_DB:
+    external:
+      name: MIEL_Board_DB
+  MIEL_Board_API:
+    external:
+      name: MIEL_Board_API
+# [계정@localhost ~/docker]$ > docker network create --driver bridge --subnet 10.10.10.0/24 --gateway 10.10.10.1 MIEL_Board_DB
+# [계정@localhost ~/docker]$ > docker network create --driver bridge --subnet 10.10.20.0/24 --gateway 10.10.20.1 MIEL_Board_API
