@@ -26,8 +26,6 @@ services:
       - MIEL_Board_DB
     ports:
       - 10240:80
-    # volumes:
-    #   - ./data/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config/config.user.inc.php
     environment:
       PMA_HOST: db
       PMA_USER: miel
@@ -44,7 +42,7 @@ services:
     restart: always
   express:
     build:
-      context: ./server
+      context: ./src
     container_name: express
     expose:
       - "3000"
@@ -62,5 +60,3 @@ networks:
   MIEL_Board_API:
     external:
       name: MIEL_Board_API
-# [계정@localhost ~/docker]$ > docker network create --driver bridge --subnet 10.10.10.0/24 --gateway 10.10.10.1 MIEL_Board_DB
-# [계정@localhost ~/docker]$ > docker network create --driver bridge --subnet 10.10.20.0/24 --gateway 10.10.20.1 MIEL_Board_API
