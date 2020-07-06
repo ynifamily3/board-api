@@ -44,6 +44,8 @@ services:
     build:
       context: ./src
     container_name: express
+    depends_on:
+      - db
     expose:
       - "3000"
     networks:
